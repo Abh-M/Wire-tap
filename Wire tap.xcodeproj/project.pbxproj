@@ -1,0 +1,215 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		799327CE166295A600224DE9 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 799327CD166295A600224DE9 /* main.cpp */; };
+		799327D0166295A600224DE9 /* Wire_tap.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 799327CF166295A600224DE9 /* Wire_tap.1 */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		799327C7166295A600224DE9 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+				799327D0166295A600224DE9 /* Wire_tap.1 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		799327C9166295A600224DE9 /* Wire tap */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Wire tap"; sourceTree = BUILT_PRODUCTS_DIR; };
+		799327CD166295A600224DE9 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		799327CF166295A600224DE9 /* Wire_tap.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = Wire_tap.1; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		799327C6166295A600224DE9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		799327BE166295A600224DE9 = {
+			isa = PBXGroup;
+			children = (
+				799327CC166295A600224DE9 /* Wire tap */,
+				799327CA166295A600224DE9 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		799327CA166295A600224DE9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				799327C9166295A600224DE9 /* Wire tap */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		799327CC166295A600224DE9 /* Wire tap */ = {
+			isa = PBXGroup;
+			children = (
+				799327CD166295A600224DE9 /* main.cpp */,
+				799327CF166295A600224DE9 /* Wire_tap.1 */,
+			);
+			path = "Wire tap";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		799327C8166295A600224DE9 /* Wire tap */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 799327D3166295A600224DE9 /* Build configuration list for PBXNativeTarget "Wire tap" */;
+			buildPhases = (
+				799327C5166295A600224DE9 /* Sources */,
+				799327C6166295A600224DE9 /* Frameworks */,
+				799327C7166295A600224DE9 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Wire tap";
+			productName = "Wire tap";
+			productReference = 799327C9166295A600224DE9 /* Wire tap */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		799327C0166295A600224DE9 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0450;
+				ORGANIZATIONNAME = Abhineet;
+			};
+			buildConfigurationList = 799327C3166295A600224DE9 /* Build configuration list for PBXProject "Wire tap" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 799327BE166295A600224DE9;
+			productRefGroup = 799327CA166295A600224DE9 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				799327C8166295A600224DE9 /* Wire tap */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		799327C5166295A600224DE9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				799327CE166295A600224DE9 /* main.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		799327D1166295A600224DE9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		799327D2166295A600224DE9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		799327D4166295A600224DE9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		799327D5166295A600224DE9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		799327C3166295A600224DE9 /* Build configuration list for PBXProject "Wire tap" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				799327D1166295A600224DE9 /* Debug */,
+				799327D2166295A600224DE9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		799327D3166295A600224DE9 /* Build configuration list for PBXNativeTarget "Wire tap" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				799327D4166295A600224DE9 /* Debug */,
+				799327D5166295A600224DE9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 799327C0166295A600224DE9 /* Project object */;
+}
