@@ -21,6 +21,7 @@
 #include <string>
 #include <iomanip>
 #include <set>
+#include <string.h>
 
 #include <arpa/inet.h>
 #include <sys/socket.h>

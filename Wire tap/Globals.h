@@ -19,4 +19,20 @@ typedef struct srcDesIpv4
     char des[INET_ADDRSTRLEN];
 };
 
+
+typedef struct kArp
+{
+    u_int16_t hardwareType;
+    u_int16_t protocolType;
+    u_char hardwareSize;
+    u_char protocolSize;
+    u_int16_t opCode;
+    u_char srcMac[ETHER_ADDR_LEN];
+    u_char srcIp[4];
+    u_char desMac[ETHER_ADDR_LEN];
+    u_char desIp[4];
+    
+    
+};
+
 #endif
