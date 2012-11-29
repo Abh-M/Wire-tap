@@ -952,6 +952,13 @@ bool Analyzer::startAnalyzing()
     char errBuff[PCAP_ERRBUF_SIZE];
     this->handle = pcap_open_offline((const char*)this->pcapFile.c_str(),errBuff);
     
+    if(this->handle==NULL)
+    {
+        
+        fprintf(stderr,"%s",errBuff);
+        exit(1);
+    }
+    
     struct pcap_pkthdr header;
     const u_char *packet;
     int totalPackets=0;
