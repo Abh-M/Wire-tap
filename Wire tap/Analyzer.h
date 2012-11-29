@@ -15,17 +15,17 @@
 
 using namespace std;
 class Analyzer {
-    
+
     string pcapFile;
     pcap_t *handle;
-    
-    //    Maps for layer 1
+
+//    Maps for layer 1
     map<string, int> ethernetUniqueSrcAddrMap;
     map<string, int> ethernetUniqueDesAddrMap;
     map<int,int> uniqueNetworkLayerProtocolsMap;
     
-    
-    //    Maps for layer 2
+
+//    Maps for layer 2
     map<string, int> ipUniqueSrcAddrMap;
     map<string, int> ipUniqueDesAddrMap;
     map<int,int>     ipUniqueTTLMap;
@@ -35,6 +35,9 @@ class Analyzer {
     int totalARPPackets;
     map<string, string> arpSrcMacAndIpMap;
     map<string, string> arpDesMacAndIpMap;
+    
+//    map<string,map<string,int> > arpSrcMacIpCntMap;
+//    map<string,map<string,int> > arpDesMacIpCntMap;
     
     //map for unique transport layer protocols
     map<int,int> uniqueTransportLayerProtocolsMap;
@@ -56,7 +59,7 @@ class Analyzer {
     map<string,int> icmpUniqueDesAddressMap;
     int totalICMPPackets;
     
-    
+
     map<int,int> udpUniqueSrcPortsMap;
     map<int,int> udpUniqueDesPortsMap;
     int totalUDPPackets;
@@ -69,32 +72,13 @@ class Analyzer {
     int minPacketSize;
     int maxPacketSize;
     int avgPacketSize;
-    
-    
-    set<long> timestamps;
-    
-    
-    
-    char startTime[20];
-    char endTime[20];
-    double diff;
-    
-    
+
     
     void analyzeEthernetHeader(struct ether_header *kHeader);
     void analyzeIPHeader(struct ip *kHeader);
     
-    
 public:
     Analyzer();
-    ~Analyzer() {
-    
-        this->ethernetUniqueDesAddrMap.clear();
-        this->ethernetUniqueSrcAddrMap.clear();
-        this->udpUniqueDesPortsMap.clear();
-        this->udpUniqueSrcPortsMap.clear();
-        
-    }
     Analyzer(string kFile);
     bool startAnalyzing();
     void getUniqueEtherAddressResult();
@@ -107,7 +91,7 @@ public:
     void getUniqueTransportLayerProtocolsResult();
     void analyzeTCPHeader(struct tcphdr *kHeader);
     void analyzeUDPHeader(struct udphdr *kHeader);
-    
+
     void getUniqueTCPPortsResult();
     void getUniqueUDPPortsResult();
     void getTCPFlagCombinationsResult();
@@ -115,10 +99,10 @@ public:
     void getICMPTypeCodeResult();
     void getICMPSrcIPResult();
     void getICMPDesIPResult();
-    //    void getARPSrcMACIPResult();
+//    void getARPSrcMACIPResult();
     
-    
-    
+
+
 };
 
 #endif /* defined(__Wiretap__Analyzer__) */

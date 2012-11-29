@@ -18,7 +18,7 @@ Analyzer::Analyzer()
 
 Analyzer::Analyzer(string kFile)
 {
-    cout<<"\nScaning: "<<kFile;
+    cout<<"\nFile to scan: "<<kFile;
     this->pcapFile = kFile;
     
 }
@@ -52,7 +52,6 @@ void Analyzer::getPacketSizeStats()
     cout<<"\n--------------------------------------------";
     cout<<"\n| Packet Size Stats                        |";
     cout<<"\n--------------------------------------------";
-    cout<<"\n Start Time          : "<<this->startTime;
     cout<<"\n Total Packets       : "<<this->totalPackets;
     cout<<"\n Maximum Packet Size : "<<this->maxPacketSize;
     cout<<"\n Minimum Packet Size : "<<this->minPacketSize;
@@ -712,7 +711,7 @@ void Analyzer::getICMPTypeCodeResult()
             cout.fill(' ');
             cout<<setprecision(4)<<(((float)(*innerItr).second)/this->totalICMPPackets)*100;
             cout<<endl;
-            
+
             
             
         }
@@ -721,6 +720,75 @@ void Analyzer::getICMPTypeCodeResult()
 }
 
 
+//void Analyzer::getARPSrcMACIPResult()
+//{
+//    
+//    
+//    
+//    cout<<"\n\n\n-----------------ARP  Source MAC and IP address-----------------\n\n";
+//    
+//    const char *thcol1 = "MAC Address";
+//    const char *thcol2 = "IP  Address";
+//    const char *thcol3 = "Number of packets";
+//    const char *thcol4 = "Percentage %";
+//    int col_1_width = (int)strlen(thcol1)+10;
+//    int col_2_width = (int)strlen(thcol2)+10;
+//    int col_3_width = (int)strlen(thcol3)+3;
+//    int col_4_width = (int)strlen(thcol4)+3;
+//    
+//    cout.width(col_1_width);
+//    cout.fill(' ');
+//    cout <<left<<thcol1;
+//    
+//    
+//    cout.width(col_2_width);
+//    cout.fill(' ');
+//    cout<<left<<thcol2;
+//    
+//    
+//    cout.width(col_3_width);
+//    cout.fill(' ');
+//    cout<<left<<(thcol3);
+//    
+//    cout.width(col_4_width);
+//    cout.fill(' ');
+//    cout<<left<<(thcol4);
+//    
+//    
+//    cout<<endl;
+//    
+//    for( map<string,map<string,int>>::iterator itr= this->arpSrcMacIpCntMap.begin(); itr!=this->arpSrcMacIpCntMap.end(); ++itr)
+//    {
+//        
+//        
+//        map<string,int> codeCntMap = (*itr).second;
+//        cout.width(col_1_width);
+//        cout.fill(' ');
+//        cout <<left<<(*itr).first;
+//        
+//        for(map<string,int>::iterator innerItr = codeCntMap.begin(); innerItr!=codeCntMap.end(); ++innerItr)
+//        {
+//            
+//            cout.width(col_2_width);
+//            cout.fill(' ');
+//            cout<<left<<(*innerItr).first;
+//            
+//            cout.width(col_3_width);
+//            cout.fill(' ');
+//            cout<<left<<(*innerItr).second;
+//            
+//            
+//            cout.width(col_4_width);
+//            cout.fill(' ');
+//            cout<<setprecision(4)<<(((float)(*innerItr).second)/this->totalARPPackets)*100;
+//            cout<<endl;
+//            
+//            
+//            
+//        }
+//    }
+//    
+//}
 
 
 
@@ -883,205 +951,190 @@ bool Analyzer::startAnalyzing()
 {
     char errBuff[PCAP_ERRBUF_SIZE];
     this->handle = pcap_open_offline((const char*)this->pcapFile.c_str(),errBuff);
-    if(this->handle==NULL)
-    {
-     
-        fprintf(stderr,"%s",errBuff);
-        exit(1);
-    }
-    else
-    {
-        struct pcap_pkthdr header;
-        const u_char *packet;
-        int totalPackets=0;
-        int minPacketSize=999999999;
-        int maxPacketSize=0;
-        int avgPacketSize=0;
-        while ((packet = pcap_next(handle, &header))!=NULL) {
-            totalPackets++;
-            //        cout<<header.ts.tv_sec;
-            this->timestamps.insert(header.ts.tv_sec);
-            struct timezone tzp;
-            gettimeofday(&header.ts, &tzp);
-            int pckSize = header.len;
-            if(pckSize<minPacketSize)
-                minPacketSize = pckSize;
-            if(pckSize>maxPacketSize)
-                maxPacketSize = pckSize;
-            avgPacketSize = (avgPacketSize*(totalPackets-1) + pckSize)/totalPackets;
+    
+    struct pcap_pkthdr header;
+    const u_char *packet;
+    int totalPackets=0;
+    int minPacketSize=999999999;
+    int maxPacketSize=0;
+    int avgPacketSize=0;
+    while ((packet = pcap_next(handle, &header))!=NULL) {
+        totalPackets++;
+        
+        int pckSize = header.len;
+        if(pckSize<minPacketSize)
+            minPacketSize = pckSize;
+        if(pckSize>maxPacketSize)
+            maxPacketSize = pckSize;
+        avgPacketSize = (avgPacketSize*(totalPackets-1) + pckSize)/totalPackets;
+        
+        
+        struct ether_header *ethernet_header = (struct ether_header*)packet;
+        this->analyzeEthernetHeader(ethernet_header);
+        
+        if(ntohs(ethernet_header->ether_type) == ETHERTYPE_IP)
+        {
+            struct ip *ip_header = (struct ip*)(packet + sizeof(struct ether_header));
+            //logIpHeader(ip_header, 1, 1);
+            this->analyzeIPHeader(ip_header);
+            this->totalV4Packets++;
             
             
-            struct ether_header *ethernet_header = (struct ether_header*)packet;
-            this->analyzeEthernetHeader(ethernet_header);
             
-            if(ntohs(ethernet_header->ether_type) == ETHERTYPE_IP)
+            if((unsigned int)ip_header->ip_p == IPPROTO_TCP )
             {
-                struct ip *ip_header = (struct ip*)(packet + sizeof(struct ether_header));
-                //logIpHeader(ip_header, 1, 1);
-                this->analyzeIPHeader(ip_header);
-                this->totalV4Packets++;
+                struct tcphdr *tcp = (struct tcphdr*)(packet + 34);
+                //logTCPHeader(tcp);
                 
+                //cout<<"\n";
+                int numberOfBytesOfTCPHeader = (unsigned int)tcp->th_off*4;
+                int totalOptionBytes= numberOfBytesOfTCPHeader-20;
+                u_char *c = (u_char *)(packet + 54);
+                set<int> allOpts;
                 
-                
-                if((unsigned int)ip_header->ip_p == IPPROTO_TCP )
+                while(totalOptionBytes>1)
                 {
-                    struct tcphdr *tcp = (struct tcphdr*)(packet + 34);
-                    //logTCPHeader(tcp);
+                    u_int length;
+                    u_int opt = *c;
+                    allOpts.insert(opt);
+                    if(opt!=1)
+                        length = *(c+1);
+                    else
+                        length = 1;
+                    // cout<<" ["<<opt<<"] ";
                     
-                    //cout<<"\n";
-                    int numberOfBytesOfTCPHeader = (unsigned int)tcp->th_off*4;
-                    int totalOptionBytes= numberOfBytesOfTCPHeader-20;
-                    u_char *c = (u_char *)(packet + 54);
-                    set<int> allOpts;
+                    c = (c+length);
                     
-                    while(totalOptionBytes>1)
-                    {
-                        u_int length;
-                        u_int opt = *c;
-                        allOpts.insert(opt);
-                        if(opt!=1)
-                            length = *(c+1);
-                        else
-                            length = 1;
-                        // cout<<" ["<<opt<<"] ";
-                        
-                        c = (c+length);
-                        
-                        totalOptionBytes-=length;
-                    }
-                    //set options counts
-                    set<int>::iterator itr;
-                    for(itr=allOpts.begin(); itr!=allOpts.end(); itr++)
-                    {
-                        
-                        int cnt = this->tcpUniqueTCPOptionsMap[*itr];
-                        this->tcpUniqueTCPOptionsMap[*itr] =cnt+1;
-                    }
-                    
-                    //cout<<"\n";
-                    this->analyzeTCPHeader(tcp);
-                    this->totalTCPPackets++;
+                    totalOptionBytes-=length;
                 }
-                else if((unsigned int)ip_header->ip_p == IPPROTO_UDP)
-                {
-                    struct udphdr *udp = (struct udphdr*)(packet +sizeof(struct ether_addr) + sizeof(struct ip));
-                    this->analyzeUDPHeader(udp);
-                    this->totalUDPPackets++;
-                    //logUDPHeader(udp);
-                }
-                else if((unsigned int)ip_header->ip_p == IPPROTO_ICMP)
+                //set options counts
+                set<int>::iterator itr;
+                for(itr=allOpts.begin(); itr!=allOpts.end(); itr++)
                 {
                     
-                    struct icmp *icmpHdr = (struct icmp*)(packet +34);
-                    int type = (unsigned int)icmpHdr->icmp_type;
-                    int code = (unsigned int)icmpHdr->icmp_code;
-                    map<int,int> icmpCodeCntMap = this->icmpTypeCodeMap[type];
-                    int cnt = icmpCodeCntMap[code];
-                    icmpCodeCntMap[code] = cnt+1;
-                    this->icmpTypeCodeMap[type] = icmpCodeCntMap;
-                    this->totalICMPPackets++;
-                    
-                    struct ip *innerIP = (struct ip*)(packet+ 8+14+20);
-                    //logIpHeader(innerIP, 1, 1);
-                    
-                    srcDesIpv4 srcDest = getIpPairForIpHeader(innerIP);
-                    
-                    string srcIp = srcDest.src;
-                    string desIp = srcDest.des;
-                    
-                    cnt = this->icmpUniqueSrcAddressMap[srcIp];
-                    this->icmpUniqueSrcAddressMap[srcIp] = cnt + 1;
-                    
-                    cnt = this->icmpUniqueDesAddressMap[desIp];
-                    this->icmpUniqueDesAddressMap[desIp] = cnt + 1;
-                    
-                    
-                    cout<<"";
+                    int cnt = this->tcpUniqueTCPOptionsMap[*itr];
+                    this->tcpUniqueTCPOptionsMap[*itr] =cnt+1;
                 }
+                
+                //cout<<"\n";
+                this->analyzeTCPHeader(tcp);
+                this->totalTCPPackets++;
             }
-            
-            
-            
-            //if header is arp
-            if(ntohs(ethernet_header->ether_type) == ETHERTYPE_ARP)
+            else if((unsigned int)ip_header->ip_p == IPPROTO_UDP)
+            {
+                struct udphdr *udp = (struct udphdr*)(packet +sizeof(struct ether_addr) + sizeof(struct ip));
+                this->analyzeUDPHeader(udp);
+                this->totalUDPPackets++;
+                //logUDPHeader(udp);
+            }
+            else if((unsigned int)ip_header->ip_p == IPPROTO_ICMP)
             {
                 
-                kArp *arpHdr = (struct kArp*)(packet+14);
-                //            cout<<ntohs(arpHdr->hardwareType)<<" 0x"<<hex<<ntohs(arpHdr->protocolType)<<" "<<(unsigned int)arpHdr->hardwareSize;
-                //            cout<<" "<<(unsigned int)arpHdr->protocolSize<<" "<<ntohs(arpHdr->opCode);
+                struct icmp *icmpHdr = (struct icmp*)(packet +34);
+                int type = (unsigned int)icmpHdr->icmp_type;
+                int code = (unsigned int)icmpHdr->icmp_code;
+                map<int,int> icmpCodeCntMap = this->icmpTypeCodeMap[type];
+                int cnt = icmpCodeCntMap[code];
+                icmpCodeCntMap[code] = cnt+1;
+                this->icmpTypeCodeMap[type] = icmpCodeCntMap;
+                this->totalICMPPackets++;
                 
-                struct ether_header srcMacAddr;
-                memcpy(srcMacAddr.ether_shost, arpHdr->srcMac,ETHER_ADDR_LEN);
-                string srcMACaddrStr = getEthSourceAddress(&srcMacAddr);
-                //            cout<<" "<<srcMACaddrStr;
+                struct ip *innerIP = (struct ip*)(packet+ 8+14+20);
+                //logIpHeader(innerIP, 1, 1);
                 
-                char buffer[15];
-                sprintf(buffer,"%d.",(unsigned int)(arpHdr->srcIp[0]));
-                sprintf(buffer,"%s%d.",buffer,(unsigned int)(arpHdr->srcIp[1]));
-                sprintf(buffer,"%s%d.",buffer,(unsigned int)(arpHdr->srcIp[2]));
-                sprintf(buffer,"%s%d",buffer,(unsigned int)(arpHdr->srcIp[3]));
-                //            cout<<" "<<buffer;
+                srcDesIpv4 srcDest = getIpPairForIpHeader(innerIP);
                 
+                string srcIp = srcDest.src;
+                string desIp = srcDest.des;
                 
+                 cnt = this->icmpUniqueSrcAddressMap[srcIp];
+                this->icmpUniqueSrcAddressMap[srcIp] = cnt + 1;
                 
+                cnt = this->icmpUniqueDesAddressMap[desIp];
+                this->icmpUniqueDesAddressMap[desIp] = cnt + 1;
+
                 
-                
-                struct ether_header desMacAddr;
-                memcpy(desMacAddr.ether_dhost, arpHdr->desMac,ETHER_ADDR_LEN);
-                string desMacAddrStr = getEthDestinationAddress(&desMacAddr);
-                //            cout<<" "<<desMacAddrStr;
-                
-                char desIpbuffer[15];
-                sprintf(desIpbuffer,"%d.",(unsigned int)(arpHdr->desIp[0]));
-                sprintf(desIpbuffer,"%s%d.",desIpbuffer,(unsigned int)(arpHdr->desIp[1]));
-                sprintf(desIpbuffer,"%s%d.",desIpbuffer,(unsigned int)(arpHdr->desIp[2]));
-                sprintf(desIpbuffer,"%s%d",desIpbuffer,(unsigned int)(arpHdr->desIp[3]));
-                //            cout<<" "<<desIpbuffer;
-                
-                
-                
-                this->arpSrcMacAndIpMap[srcMACaddrStr] = buffer;
-                this->arpSrcMacAndIpMap[desMacAddrStr] = desIpbuffer;
-                //            cout<<" ";
-                this->totalARPPackets++;
-                
-                
-                
+                cout<<"";
             }
+        }
+        
+        typedef struct kArp
+        {
+            u_int16_t hardwareType;
+            u_int16_t protocolType;
+            u_char hardwareSize;
+            u_char protocolSize;
+            u_int16_t opCode;
+            u_char srcMac[ETHER_ADDR_LEN];
+            u_char srcIp[4];
+            u_char desMac[ETHER_ADDR_LEN];
+            u_char desIp[4];
+
+
+        };
+        
+        
+        //if header is arp
+        if(ntohs(ethernet_header->ether_type) == ETHERTYPE_ARP)
+        {
+//            cout<<"\n Got ARP Packet";
+//            cout<<" ";
+            
+            kArp *arpHdr = (struct kArp*)(packet+14);
+//            cout<<ntohs(arpHdr->hardwareType)<<" 0x"<<hex<<ntohs(arpHdr->protocolType)<<" "<<(unsigned int)arpHdr->hardwareSize;
+//            cout<<" "<<(unsigned int)arpHdr->protocolSize<<" "<<ntohs(arpHdr->opCode);
+
+            struct ether_header srcMacAddr;
+            memcpy(srcMacAddr.ether_shost, arpHdr->srcMac,ETHER_ADDR_LEN);
+            string srcMACaddrStr = getEthSourceAddress(&srcMacAddr);
+//            cout<<" "<<srcMACaddrStr;
+
+            char buffer[15];
+            sprintf(buffer,"%d.",(unsigned int)(arpHdr->srcIp[0]));
+            sprintf(buffer,"%s%d.",buffer,(unsigned int)(arpHdr->srcIp[1]));
+            sprintf(buffer,"%s%d.",buffer,(unsigned int)(arpHdr->srcIp[2]));
+            sprintf(buffer,"%s%d",buffer,(unsigned int)(arpHdr->srcIp[3]));
+//            cout<<" "<<buffer;
             
             
+//            map<string,int> srcIpCntMap = this->arpSrcMacIpCntMap[srcMACaddrStr];
+//            int cnt = srcIpCntMap[buffer];
+//            srcIpCntMap[buffer] = cnt+1;
+//            this->arpSrcMacIpCntMap[srcMACaddrStr] = srcIpCntMap;
+            
+            
+            
+            struct ether_header desMacAddr;
+            memcpy(desMacAddr.ether_dhost, arpHdr->desMac,ETHER_ADDR_LEN);
+            string desMacAddrStr = getEthDestinationAddress(&desMacAddr);
+//            cout<<" "<<desMacAddrStr;
+
+            char desIpbuffer[15];
+            sprintf(desIpbuffer,"%d.",(unsigned int)(arpHdr->desIp[0]));
+            sprintf(desIpbuffer,"%s%d.",desIpbuffer,(unsigned int)(arpHdr->desIp[1]));
+            sprintf(desIpbuffer,"%s%d.",desIpbuffer,(unsigned int)(arpHdr->desIp[2]));
+            sprintf(desIpbuffer,"%s%d",desIpbuffer,(unsigned int)(arpHdr->desIp[3]));
+//            cout<<" "<<desIpbuffer;
+
+            
+            
+            this->arpSrcMacAndIpMap[srcMACaddrStr] = buffer;
+            this->arpSrcMacAndIpMap[desMacAddrStr] = desIpbuffer;
+//            cout<<" ";
+            this->totalARPPackets++;
+
+
             
         }
         
-        this->totalPackets = totalPackets;
-        this->minPacketSize = minPacketSize;
-        this->maxPacketSize = maxPacketSize;
-        this->avgPacketSize = avgPacketSize;
         
-        pcap_close(this->handle);
-        
-        set<long>::iterator theItr;
-        
-        theItr = this->timestamps.begin();
-        long start = *theItr;
-        
-        theItr = this->timestamps.end();
-        long end = *theItr;
-        
-        time_t start_Time = (time_t)(start);
-        strftime(this->startTime, 20, "%Y-%m-%d %H:%M:%S", localtime(&start_Time));
-        
-        
-        time_t end_Time = (time_t)(end);
-        strftime(this->endTime, 20, "%Y-%m-%d %H:%M:%S", gmtime(&end_Time));
-        
-        
-        
-        this->diff = difftime (end_Time,start_Time);
-
         
     }
     
+    this->totalPackets = totalPackets;
+    this->minPacketSize = minPacketSize;
+    this->maxPacketSize = maxPacketSize;
+    this->avgPacketSize = avgPacketSize;
     
     return (this->handle!=NULL)?true:false;
     
