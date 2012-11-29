@@ -12,3 +12,9 @@ Wire tap.xcodeproj/project.pbxproj
 *.xcuserstate
 
 *.pbxproj
+
+*.out
+
+*.xcsettings
+
+Wire tap/mycap1.pcap

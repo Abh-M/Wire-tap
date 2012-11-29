@@ -120,21 +120,21 @@ string getFlagCombinationForTCPHeader(struct tcphdr *kHeader)
      */
     
     if (kHeader->th_flags & TH_FIN)
-        flags.append(" TH_FIN ");
+        flags.append(" FIN ");
     if(kHeader->th_flags & TH_SYN)
-        flags.append(" TH_SYN ");
+        flags.append(" SYN ");
     if(kHeader->th_flags & TH_RST)
-        flags.append(" TH_RST ");
+        flags.append(" RST ");
     if (kHeader->th_flags & TH_PUSH)
-        flags.append(" TH_PUSH ");
+        flags.append(" PUSH ");
     if (kHeader->th_flags & TH_ACK)
-        flags.append(" TH_ACK ");
+        flags.append(" ACK ");
     if (kHeader->th_flags & TH_URG)
-        flags.append(" TH_URG ");
+        flags.append(" URG ");
     if (kHeader->th_flags & TH_ECE)
-        flags.append(" TH_ECE ");
+        flags.append(" ECE ");
     if (kHeader->th_flags & TH_CWR)
-        flags.append(" TH_CWR ");
+        flags.append(" CWR ");
 
     
     return flags;
@@ -163,4 +163,21 @@ void logTCPHeader(struct tcphdr *kHeader){
 void logUDPHeader(struct udphdr *header)
 {
     cout<<"\nUDP |src port: "<<ntohs(header->uh_sport)<<" |des port: "<<ntohs(header->uh_dport);
+}
+
+
+bool isBroadCastEtherAddress(string macAddr)
+{
+    int isBroadcast = false;
+    string bd1 = string("0:0:0:0:0:0");
+    string bd2 = string("ff:ff:ff:ff:ff:ff");
+    
+    if(bd1.compare(macAddr)==0 || bd2.compare(macAddr)==0)
+        isBroadcast = true;
+    
+    
+    return isBroadcast;
+    
+    
+    
 }

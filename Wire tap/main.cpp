@@ -12,6 +12,8 @@
 using namespace std;
 int main(int argc, const char * argv[])
 {
+    
+    
     if(argc!=2)
     {
         fprintf(stderr, "Invalid number of arguments \nQuitting.....");
@@ -50,18 +52,39 @@ int main(int argc, const char * argv[])
             pathToFile.append(fileNmae);
             Analyzer *kAnalyzer = new Analyzer(pathToFile);
             kAnalyzer->startAnalyzing();
+
+            
+            cout<<"\n\n===================== Summary =====================\n";
+            
             kAnalyzer->getPacketSizeStats();
+            
+            
+            cout<<"\n\n===================== Link layer =====================\n";
+
             kAnalyzer->getUniqueEtherAddressResult();
+            
+            cout<<"\n\n===================== Network layer =====================\n";
+            
+            
             kAnalyzer->getUniqueNetworkLayerProtoclsResult();
             kAnalyzer->getUniqueSrcIPResult();
             kAnalyzer->getUniqueDesIPResult();
             kAnalyzer->getUniqueTTLResult();
             kAnalyzer->getUniqueARPParticipantsResult();
+            
+            cout<<"\n\n===================== Transport layer =====================\n";
+            
             kAnalyzer->getUniqueTransportLayerProtocolsResult();
             kAnalyzer->getUniqueTCPPortsResult();
-            kAnalyzer->getUniqueUDPPortsResult();
             kAnalyzer->getTCPFlagCombinationsResult();
             kAnalyzer->getTCPOptionsResult();
+
+            
+            cout<<"\n\n===================== Transport layer: UDP =====================\n\n";
+
+            kAnalyzer->getUniqueUDPPortsResult();
+            
+            cout<<"\n\n================== Transport layer: ICMP =====================\n\n";
             kAnalyzer->getICMPTypeCodeResult();
             kAnalyzer->getICMPSrcIPResult();
             kAnalyzer->getICMPDesIPResult();

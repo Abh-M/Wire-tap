@@ -22,6 +22,7 @@ srcDesIpv4 getIpPairForIpHeader(struct ip *kIpHdr);
 void logTCPHeader(struct tcphdr *kHeader);
 void logUDPHeader(struct udphdr *header);
 string getFlagCombinationForTCPHeader(struct tcphdr *kHeader);
+bool isBroadCastEtherAddress(string macAddr);
 
 
 #endif /* defined(__Wiretap__Helpers__) */

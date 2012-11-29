@@ -71,11 +71,19 @@ class Analyzer {
     int totalPackets;
     int minPacketSize;
     int maxPacketSize;
-    int avgPacketSize;
+    double avgPacketSize;
 
     
     void analyzeEthernetHeader(struct ether_header *kHeader);
     void analyzeIPHeader(struct ip *kHeader);
+    
+    
+    set<long> timestamps;
+    char startTime[20];
+    char endTime[20];
+    double diff;
+
+    
     
 public:
     Analyzer();
