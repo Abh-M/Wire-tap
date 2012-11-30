@@ -99,8 +99,16 @@ void Analyzer::getUniqueNetworkLayerProtoclsResult()
                 cout <<left<<"IP";
             else if((*itr).first == ETHERTYPE_ARP)
                 cout <<left<<"ARP";
+            else if((*itr).first <= 1536)
+            {
+                char buff[50];
+                sprintf(buff, "*Length = %d",(*itr).first);
+                cout<<left<<buff;
+
+            }
             else
-                cout <<left<<(*itr).first;
+                cout<<left<<(*itr).first;
+            
             
             cout.width(col_2_width);
             cout.fill(' ');
@@ -319,7 +327,7 @@ void Analyzer::getUniqueEtherAddressResult()
     
     cout<<"\n\n--------------Destination Ethernet Address--------------\n";
     
-    if(this->ethernetUniqueDesAddrMap.size()==0)
+    if(this->ethernetUniqueDesAddrMap.size()==0 )
     {
         NO_RESULT
     }
