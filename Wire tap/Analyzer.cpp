@@ -319,7 +319,7 @@ void Analyzer::getUniqueEtherAddressResult()
     
     cout<<"\n\n--------------Destination Ethernet Address--------------\n";
     
-    if(this->ethernetUniqueDesAddrMap.size())
+    if(this->ethernetUniqueDesAddrMap.size()==0)
     {
         NO_RESULT
     }
@@ -840,7 +840,7 @@ void Analyzer::getICMPTypeCodeResult()
         
         cout<<endl;
         
-        for( map<int,map<int,int>>::iterator itr= this->icmpTypeCodeMap.begin(); itr!=this->icmpTypeCodeMap.end(); ++itr)
+        for( map<int,map<int,int> >::iterator itr= this->icmpTypeCodeMap.begin(); itr!=this->icmpTypeCodeMap.end(); ++itr)
         {
             
             
