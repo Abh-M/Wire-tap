@@ -36,8 +36,6 @@ class Analyzer {
     map<string, string> arpSrcMacAndIpMap;
     map<string, string> arpDesMacAndIpMap;
     
-//    map<string,map<string,int> > arpSrcMacIpCntMap;
-//    map<string,map<string,int> > arpDesMacIpCntMap;
     
     //map for unique transport layer protocols
     map<int,int> uniqueTransportLayerProtocolsMap;
@@ -54,9 +52,11 @@ class Analyzer {
     map<int,int> tcpUniqueTCPOptionsMap;
     
     //ICMP Maps
-    map<int,map<int,int> > icmpTypeCodeMap;
     map<string,int> icmpUniqueSrcAddressMap;
     map<string,int> icmpUniqueDesAddressMap;
+    map<int,int> icmpTypeMap;
+    map<int,int> icmpCodeMap;
+
     int totalICMPPackets;
     
 
@@ -74,14 +74,20 @@ class Analyzer {
     double avgPacketSize;
 
     
-    void analyzeEthernetHeader(struct ether_header *kHeader);
-    void analyzeIPHeader(struct ip *kHeader);
     
     
     set<long> timestamps;
     char startTime[20];
     char endTime[20];
     double diff;
+    
+    
+    void analyzeEthernetHeader(struct ether_header *kHeader);
+    void analyzeIPHeader(struct ip *kHeader);
+    void analyzeTCPHeader(struct tcphdr *kHeader);
+    void analyzeUDPHeader(struct udphdr *kHeader);
+
+
 
     
     
@@ -89,6 +95,7 @@ public:
     Analyzer();
     Analyzer(string kFile);
     bool startAnalyzing();
+    
     void getUniqueEtherAddressResult();
     void getPacketSizeStats();
     void getUniqueNetworkLayerProtoclsResult();
@@ -97,9 +104,6 @@ public:
     void getUniqueTTLResult();
     void getUniqueARPParticipantsResult();
     void getUniqueTransportLayerProtocolsResult();
-    void analyzeTCPHeader(struct tcphdr *kHeader);
-    void analyzeUDPHeader(struct udphdr *kHeader);
-
     void getUniqueTCPPortsResult();
     void getUniqueUDPPortsResult();
     void getTCPFlagCombinationsResult();
@@ -107,7 +111,6 @@ public:
     void getICMPTypeCodeResult();
     void getICMPSrcIPResult();
     void getICMPDesIPResult();
-//    void getARPSrcMACIPResult();
     
 
 

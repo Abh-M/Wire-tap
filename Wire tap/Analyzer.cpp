@@ -21,6 +21,27 @@ Analyzer::Analyzer(string kFile)
     cout<<"\nFile to scan: "<<kFile;
     this->pcapFile = kFile;
     
+    this->totalARPPackets=0;
+    this->totalTCPPackets=0;
+    
+    
+    this->totalICMPPackets=0;
+    this->totalUDPPackets=0;
+    
+    
+    this->totalV6Packets=0;
+    this->totalV4Packets=0;
+    
+    this->totalPackets=0;
+    this->minPacketSize=0;
+    this->maxPacketSize=0;
+    
+    this->avgPacketSize=0.0;
+    this->diff=0.0;
+    
+    
+    
+    
 }
 
 
@@ -104,7 +125,7 @@ void Analyzer::getUniqueNetworkLayerProtoclsResult()
                 char buff[50];
                 sprintf(buff, "*Length = %d",(*itr).first);
                 cout<<left<<buff;
-
+                
             }
             else
                 cout<<left<<(*itr).first;
@@ -115,7 +136,7 @@ void Analyzer::getUniqueNetworkLayerProtoclsResult()
             cout<<left<<(*itr).second;
             cout.width(col_3_width);
             cout.fill(' ');
-            cout <<setprecision(4)<<(((float)(*itr).second)/this->totalPackets)*100;
+            cout<<(((float)(*itr).second)/this->totalPackets)*100;
             cout<<endl;
         }
         
@@ -170,7 +191,7 @@ void Analyzer::getUniqueSrcIPResult()
             cout<<left<<(*itr).second;
             cout.width(col_3_width);
             cout.fill(' ');
-            cout <<setprecision(4)<<(((float)(*itr).second)/this->totalV4Packets)*100;
+            cout <<(((float)(*itr).second)/this->totalV4Packets)*100;
             cout<<endl;
         }
         
@@ -219,7 +240,7 @@ void Analyzer::getUniqueTTLResult()
         cout<<left<<(*itr).second;
         cout.width(col_3_width);
         cout.fill(' ');
-        cout <<setprecision(4)<<(((float)(*itr).second)/this->totalV4Packets)*100;
+        cout <<(((float)(*itr).second)/this->totalV4Packets)*100;
         cout<<endl;
     }
     
@@ -263,7 +284,7 @@ void Analyzer::getUniqueDesIPResult()
         cout<<left<<(*itr).second;
         cout.width(col_3_width);
         cout.fill(' ');
-        cout <<setprecision(4)<<(((float)(*itr).second)/this->totalV4Packets)*100;
+        cout <<(((float)(*itr).second)/this->totalV4Packets)*100;
         cout<<endl;
     }
     
@@ -315,7 +336,7 @@ void Analyzer::getUniqueEtherAddressResult()
             cout<<left<<(*itr).second;
             cout.width(col_3_width);
             cout.fill(' ');
-            cout <<setprecision(4)<<(((float)(*itr).second)/this->totalPackets)*100;
+            cout <<(((float)(*itr).second)/this->totalPackets)*100;
             cout<<endl;
         }
         
@@ -360,7 +381,7 @@ void Analyzer::getUniqueEtherAddressResult()
             cout<<left<<(*itr).second;
             cout.width(col_3_width);
             cout.fill(' ');
-            cout <<setprecision(4)<<(((float)(*itr).second)/this->totalPackets)*100;
+            cout <<(((float)(*itr).second)/this->totalPackets)*100;
             cout<<endl;
             
             
@@ -483,7 +504,7 @@ void Analyzer::getUniqueTransportLayerProtocolsResult()
             cout<<left<<(*itr).second;
             cout.width(col_3_width);
             cout.fill(' ');
-            cout <<setprecision(4)<<(((float)(*itr).second)/this->totalV4Packets)*100;
+            cout <<(((float)(*itr).second)/this->totalV4Packets)*100;
             cout<<endl;
         }
         
@@ -537,7 +558,7 @@ void Analyzer::getUniqueTCPPortsResult()
             cout<<left<<(*itr).second;
             cout.width(col_3_width);
             cout.fill(' ');
-            cout <<setprecision(4)<<(((float)(*itr).second)/this->totalTCPPackets)*100;
+            cout <<(((float)(*itr).second)/this->totalTCPPackets)*100;
             cout<<endl;
         }
         
@@ -580,7 +601,7 @@ void Analyzer::getUniqueTCPPortsResult()
             cout<<left<<(*itr).second;
             cout.width(col_3_width);
             cout.fill(' ');
-            cout <<setprecision(4)<<(((float)(*itr).second)/this->totalTCPPackets)*100;
+            cout <<(((float)(*itr).second)/this->totalTCPPackets)*100;
             cout<<endl;
             
             
@@ -636,7 +657,7 @@ void Analyzer::getTCPFlagCombinationsResult()
             cout<<left<<(*itr).second;
             cout.width(col_3_width);
             cout.fill(' ');
-            cout <<setprecision(4)<<(((float)(*itr).second)/this->totalTCPPackets)*100;
+            cout <<(((float)(*itr).second)/this->totalTCPPackets)*100;
             cout<<endl;
         }
         
@@ -690,7 +711,7 @@ void Analyzer::getUniqueUDPPortsResult()
             cout<<left<<(*itr).second;
             cout.width(col_3_width);
             cout.fill(' ');
-            cout <<setprecision(4)<<(((float)(*itr).second)/this->totalUDPPackets)*100;
+            cout <<(((float)(*itr).second)/this->totalUDPPackets)*100;
             cout<<endl;
         }
         
@@ -735,7 +756,7 @@ void Analyzer::getUniqueUDPPortsResult()
             cout<<left<<(*itr).second;
             cout.width(col_3_width);
             cout.fill(' ');
-            cout <<setprecision(4)<<(((float)(*itr).second)/this->totalUDPPackets)*100;
+            cout <<(((float)(*itr).second)/this->totalUDPPackets)*100;
             cout<<endl;
             
             
@@ -792,7 +813,7 @@ void Analyzer::getTCPOptionsResult()
             cout<<left<<(*itr).second;
             cout.width(col_3_width);
             cout.fill(' ');
-            cout <<setprecision(4)<<(((float)(*itr).second)/this->totalTCPPackets)*100;
+            cout <<(((float)(*itr).second)/this->totalTCPPackets)*100;
             cout<<endl;
         }
         
@@ -806,26 +827,71 @@ void Analyzer::getTCPOptionsResult()
 void Analyzer::getICMPTypeCodeResult()
 {
     
-    cout<<"\n\n-----------------ICMP  Types and Code-----------------\n\n";
+    cout<<"\n\n-----------------ICMP Types-----------------\n\n";
+    const char *thcol1 = "Type";
+    const char *thcol2 = "Number of packets";
+    const char *thcol3 = "Percentage %";
+    int col_1_width = (int)strlen(thcol1)+15;
+    int col_2_width = (int)strlen(thcol2)+3;
+    int col_3_width = (int)strlen(thcol3)+3;
     
     
-    if(this->icmpTypeCodeMap.size()==0)
+    if(this->icmpTypeMap.size()==0)
     {
-        NO_RESULT;
-        
+        NO_RESULT
     }
     else
     {
+        cout.width(col_1_width);
+        cout.fill(' ');
+        cout <<left<<thcol1;
         
         
-        const char *thcol1 = "Type";
-        const char *thcol2 = "Code";
-        const char *thcol3 = "Number of packets";
-        const char *thcol4 = "Percentage %";
-        int col_1_width = (int)strlen(thcol1)+3;
+        cout.width(col_2_width);
+        cout.fill(' ');
+        cout<<left<<thcol2;
+        
+        
+        cout.width(col_3_width);
+        cout.fill(' ');
+        cout<<left<<(thcol3);
+        cout<<endl;
+        for( map<int,int>::iterator itr= this->icmpTypeMap.begin(); itr!=this->icmpTypeMap.end(); ++itr)
+        {
+            cout.width(col_1_width);
+            cout.fill(' ');
+            cout <<left<<(*itr).first;
+            cout.width(col_2_width);
+            cout.fill(' ');
+            cout<<left<<(*itr).second;
+            cout.width(col_3_width);
+            cout.fill(' ');
+            cout <<(((float)(*itr).second)/this->totalICMPPackets)*100;
+            cout<<endl;
+        }
+        
+        
+    }
+    
+    
+    
+    cout<<"\n\n--------------ICMP codes--------------\n\n";
+    
+    
+    if(this->icmpCodeMap.size()==0)
+    {
+        NO_RESULT
+    }
+    else
+    {
+        const char *thcol1 = "Code";
+        const char *thcol2 = "Number of packets";
+        const char *thcol3 = "Percentage %";
+        int col_1_width = (int)strlen(thcol1)+15;
         int col_2_width = (int)strlen(thcol2)+3;
         int col_3_width = (int)strlen(thcol3)+3;
-        int col_4_width = (int)strlen(thcol4)+3;
+        
+        
         
         cout.width(col_1_width);
         cout.fill(' ');
@@ -840,43 +906,24 @@ void Analyzer::getICMPTypeCodeResult()
         cout.width(col_3_width);
         cout.fill(' ');
         cout<<left<<(thcol3);
-        
-        cout.width(col_4_width);
-        cout.fill(' ');
-        cout<<left<<(thcol4);
-        
-        
         cout<<endl;
         
-        for( map<int,map<int,int> >::iterator itr= this->icmpTypeCodeMap.begin(); itr!=this->icmpTypeCodeMap.end(); ++itr)
+        
+        
+        for( map<int,int>::iterator itr= this->icmpCodeMap.begin(); itr!=this->icmpCodeMap.end(); ++itr)
         {
-            
-            
-            map<int,int> codeCntMap = (*itr).second;
             cout.width(col_1_width);
             cout.fill(' ');
             cout <<left<<(*itr).first;
+            cout.width(col_2_width);
+            cout.fill(' ');
+            cout<<left<<(*itr).second;
+            cout.width(col_3_width);
+            cout.fill(' ');
+            cout <<(((float)(*itr).second)/this->totalICMPPackets)*100;
+            cout<<endl;
             
-            for(map<int,int>::iterator innerItr = codeCntMap.begin(); innerItr!=codeCntMap.end(); ++innerItr)
-            {
-                
-                cout.width(col_2_width);
-                cout.fill(' ');
-                cout<<left<<(*innerItr).first;
-                
-                cout.width(col_3_width);
-                cout.fill(' ');
-                cout<<left<<(*innerItr).second;
-                
-                
-                cout.width(col_4_width);
-                cout.fill(' ');
-                cout<<setprecision(4)<<(((float)(*innerItr).second)/this->totalICMPPackets)*100;
-                cout<<endl;
-                
-                
-                
-            }
+            
         }
         
         
@@ -886,75 +933,6 @@ void Analyzer::getICMPTypeCodeResult()
 }
 
 
-//void Analyzer::getARPSrcMACIPResult()
-//{
-//
-//
-//
-//    cout<<"\n\n\n-----------------ARP  Source MAC and IP address-----------------\n\n";
-//
-//    const char *thcol1 = "MAC Address";
-//    const char *thcol2 = "IP  Address";
-//    const char *thcol3 = "Number of packets";
-//    const char *thcol4 = "Percentage %";
-//    int col_1_width = (int)strlen(thcol1)+10;
-//    int col_2_width = (int)strlen(thcol2)+10;
-//    int col_3_width = (int)strlen(thcol3)+3;
-//    int col_4_width = (int)strlen(thcol4)+3;
-//
-//    cout.width(col_1_width);
-//    cout.fill(' ');
-//    cout <<left<<thcol1;
-//
-//
-//    cout.width(col_2_width);
-//    cout.fill(' ');
-//    cout<<left<<thcol2;
-//
-//
-//    cout.width(col_3_width);
-//    cout.fill(' ');
-//    cout<<left<<(thcol3);
-//
-//    cout.width(col_4_width);
-//    cout.fill(' ');
-//    cout<<left<<(thcol4);
-//
-//
-//    cout<<endl;
-//
-//    for( map<string,map<string,int>>::iterator itr= this->arpSrcMacIpCntMap.begin(); itr!=this->arpSrcMacIpCntMap.end(); ++itr)
-//    {
-//
-//
-//        map<string,int> codeCntMap = (*itr).second;
-//        cout.width(col_1_width);
-//        cout.fill(' ');
-//        cout <<left<<(*itr).first;
-//
-//        for(map<string,int>::iterator innerItr = codeCntMap.begin(); innerItr!=codeCntMap.end(); ++innerItr)
-//        {
-//
-//            cout.width(col_2_width);
-//            cout.fill(' ');
-//            cout<<left<<(*innerItr).first;
-//
-//            cout.width(col_3_width);
-//            cout.fill(' ');
-//            cout<<left<<(*innerItr).second;
-//
-//
-//            cout.width(col_4_width);
-//            cout.fill(' ');
-//            cout<<setprecision(4)<<(((float)(*innerItr).second)/this->totalARPPackets)*100;
-//            cout<<endl;
-//
-//
-//
-//        }
-//    }
-//
-//}
 
 
 
@@ -1001,7 +979,7 @@ void Analyzer::getICMPSrcIPResult()
             cout<<left<<(*itr).second;
             cout.width(col_3_width);
             cout.fill(' ');
-            cout <<setprecision(4)<<(((float)(*itr).second)/this->totalICMPPackets)*100;
+            cout<<setprecision(2)<<(((float)(*itr).second)/this->totalICMPPackets)*100;
             cout<<endl;
         }
         
@@ -1054,7 +1032,7 @@ void Analyzer::getICMPDesIPResult()
             cout<<left<<(*itr).second;
             cout.width(col_3_width);
             cout.fill(' ');
-            cout <<setprecision(4)<<(((float)(*itr).second)/this->totalICMPPackets)*100;
+            cout <<(((float)(*itr).second)/this->totalICMPPackets)*100;
             cout<<endl;
         }
         
@@ -1227,19 +1205,29 @@ bool Analyzer::startAnalyzing()
                 struct icmp *icmpHdr = (struct icmp*)(packet +34);
                 int type = (unsigned int)icmpHdr->icmp_type;
                 int code = (unsigned int)icmpHdr->icmp_code;
-                map<int,int> icmpCodeCntMap = this->icmpTypeCodeMap[type];
-                int cnt = icmpCodeCntMap[code];
-                icmpCodeCntMap[code] = cnt+1;
-                this->icmpTypeCodeMap[type] = icmpCodeCntMap;
+                //                map<int,int> icmpCodeCntMap = this->icmpTypeCodeMap[type];
+                //                int cnt = icmpCodeCntMap[code];
+                //                icmpCodeCntMap[code] = cnt+1;
+                //                this->icmpTypeCodeMap[type] = icmpCodeCntMap;
+                
+                
+                int cnt = this->icmpCodeMap[code];
+                this->icmpCodeMap[code] = cnt+1;
+                
+                cnt = this->icmpTypeMap[type];
+                this->icmpTypeMap[type] = cnt+1;
+                
+                
                 this->totalICMPPackets++;
                 
-                struct ip *innerIP = (struct ip*)(packet+ 8+14+20);
+                struct ip *innerIP = (struct ip*)(packet+14);
                 //logIpHeader(innerIP, 1, 1);
                 
                 srcDesIpv4 srcDest = getIpPairForIpHeader(innerIP);
                 
                 string srcIp = srcDest.src;
                 string desIp = srcDest.des;
+                
                 
                 cnt = this->icmpUniqueSrcAddressMap[srcIp];
                 this->icmpUniqueSrcAddressMap[srcIp] = cnt + 1;
@@ -1252,7 +1240,7 @@ bool Analyzer::startAnalyzing()
             }
         }
         
-        typedef struct kArp
+        typedef struct ArpStructure
         {
             u_int16_t hardwareType;
             u_int16_t protocolType;
@@ -1265,7 +1253,7 @@ bool Analyzer::startAnalyzing()
             u_char desIp[4];
             
             
-        };
+        }kArp;
         
         
         //if header is arp
@@ -1274,7 +1262,7 @@ bool Analyzer::startAnalyzing()
             //            cout<<"\n Got ARP Packet";
             //            cout<<" ";
             
-            kArp *arpHdr = (struct kArp*)(packet+14);
+            kArp *arpHdr = ( kArp*)(packet+14);
             //            cout<<ntohs(arpHdr->hardwareType)<<" 0x"<<hex<<ntohs(arpHdr->protocolType)<<" "<<(unsigned int)arpHdr->hardwareSize;
             //            cout<<" "<<(unsigned int)arpHdr->protocolSize<<" "<<ntohs(arpHdr->opCode);
             

@@ -51,6 +51,7 @@ int main(int argc, const char * argv[])
             string fileNmae(argv[1]);
             pathToFile.append(fileNmae);
             Analyzer *kAnalyzer = new Analyzer(pathToFile);
+            cout<<setiosflags(ios::fixed | ios::showpoint | ios::left)<<setprecision(2);
             kAnalyzer->startAnalyzing();
 
             
@@ -85,9 +86,9 @@ int main(int argc, const char * argv[])
             kAnalyzer->getUniqueUDPPortsResult();
             
             cout<<"\n\n================== Transport layer: ICMP =====================\n\n";
-            kAnalyzer->getICMPTypeCodeResult();
             kAnalyzer->getICMPSrcIPResult();
             kAnalyzer->getICMPDesIPResult();
+            kAnalyzer->getICMPTypeCodeResult();
             kAnalyzer->~Analyzer();
             
             

@@ -13,11 +13,11 @@
 #define START_DELIMITER "\n----------------------START-------------------------";
 #define END_DELIMITER   "\n\n---------------------END--------------------------";
 
-typedef struct srcDesIpv4
+typedef struct ipformatstruct
 {
     char src[INET_ADDRSTRLEN];
     char des[INET_ADDRSTRLEN];
-};
+}srcDesIpv4;
 
 
 

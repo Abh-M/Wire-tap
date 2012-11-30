@@ -18,3 +18,5 @@ Wire tap.xcodeproj/project.pbxproj
 *.xcsettings
 
 Wire tap/mycap1.pcap
+
+Wire tap/wiretap
